@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Easy Carousel Demo</title>
+  <link rel="stylesheet" href="../dist/easy-carousel.css">
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .demo-section { margin-bottom: 60px; }
+
+    /* Simple animations */
+    .fade-in {
+      animation: fadeIn 0.5s forwards;
+    }
+    .fade-out {
+      animation: fadeOut 0.5s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    .ec-item img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Easy Carousel Demo</h1>
+
+  <div class="demo-section">
+    <h2>Basic Carousel</h2>
+    <div class="carousel-basic">
+      <img src="https://placehold.co/600x300/1e90ff/ffffff?text=Slide+1" />
+      <img src="https://placehold.co/600x300/ff6347/ffffff?text=Slide+2" />
+      <img src="https://placehold.co/600x300/32cd32/ffffff?text=Slide+3" />
+      <img src="https://placehold.co/600x300/ffa500/ffffff?text=Slide+4" />
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Carousel with Autoplay + Navigation</h2>
+    <div class="carousel-autoplay">
+      <img src="https://placehold.co/600x300/4682b4/ffffff?text=A" />
+      <img src="https://placehold.co/600x300/db7093/ffffff?text=B" />
+      <img src="https://placehold.co/600x300/556b2f/ffffff?text=C" />
+      <img src="https://placehold.co/600x300/8a2be2/ffffff?text=D" />
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>Carousel with LazyLoad + Animation</h2>
+    <div class="carousel-lazy">
+      <img data-src="https://placehold.co/600x300/191970/ffffff?text=X" alt="" />
+      <img data-src="https://placehold.co/600x300/ff1493/ffffff?text=Y" alt="" />
+      <img data-src="https://placehold.co/600x300/3cb371/ffffff?text=Z" alt="" />
+      <img data-src="https://placehold.co/600x300/f4a460/ffffff?text=W" alt="" />
+    </div>
+  </div>
+
+  <script src="../dist/easy-carousel.js"></script>
+  <script>
+    new EasyCarousel('.carousel-basic', {
+      items: 2,
+      margin: 20,
+      dots: true,
+      responsive: {
+        0: { items: 1 },
+        768: { items: 2 },
+        1024: { items: 3 }
+    }
+    });
+
+    new EasyCarousel('.carousel-autoplay', {
+      items: 1,
+      nav: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+      autoplayHoverPause: true
+    });
+
+    new EasyCarousel('.carousel-lazy', {
+      items: 1,
+      lazyLoad: true,
+      animateIn: 'fade-in',
+      animateOut: 'fade-out',
+      margin: 10
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+/* File: easy-carousel.css
+ * Basic styles for EasyCarousel
+ * Author: Nikba Creative Studio
+ */
+
+.easy-carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    outline: none; /* Remove focus outline but keep it keyboard accessible */
+    touch-action: pan-y pinch-zoom; /* Improve touch handling */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.easy-carousel.is-dragging {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.easy-carousel .ec-stage {
+    display: flex;
+    will-change: transform;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backface-visibility: hidden; /* Prevent flickering */
+    -webkit-font-smoothing: antialiased;
+    cursor: grab;
+    cursor: -webkit-grab;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+.easy-carousel .ec-item {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+.easy-carousel .ec-item * {
+    pointer-events: auto;
+}
+
+.ec-nav {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.ec-prev,
+.ec-next {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.ec-prev:hover,
+.ec-next:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ec-prev:focus,
+.ec-next:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.ec-dots {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.ec-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    padding: 0;
+}
+
+.ec-dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.ec-dot.active {
+    background-color: #fff;
+    transform: scale(1.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ec-prev,
+    .ec-next {
+        width: 32px;
+        height: 32px;
+    }
+
+    .ec-dots {
+        bottom: 5px;
+    }
+}
+
+/* Fade animation classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
