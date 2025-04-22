@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/Nikba-Creative-Studio/easy-carousel/issues"
   },
-  "homepage": "https://github.com/Nikba-Creative-Studio/easy-carousel#readme",
+  "homepage": "https://nikba-creative-studio.github.io/easy-carousel/",
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
