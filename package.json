@@ -1,6 +1,6 @@
 {
-  "name": "easy-carousel",
-  "version": "1.0.0",
+  "name": "@nikba/easy-carousel",
+  "version": "1.0.1",
   "description": "A lightweight, responsive, and feature-rich JavaScript carousel/slider library with no dependencies",
   "main": "dist/easy-carousel.min.js",
   "style": "dist/easy-carousel.min.css",
@@ -27,12 +27,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nikba/easy-carousel.git"
+    "url": "git+https://github.com/Nikba-Creative-Studio/easy-carousel.git"
   },
   "bugs": {
-    "url": "https://github.com/nikba/easy-carousel/issues"
+    "url": "https://github.com/Nikba-Creative-Studio/easy-carousel/issues"
   },
-  "homepage": "https://github.com/nikba/easy-carousel#readme",
+  "homepage": "https://github.com/Nikba-Creative-Studio/easy-carousel#readme",
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
