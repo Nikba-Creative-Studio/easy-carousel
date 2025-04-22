@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Carousel - A Lightweight JavaScript Carousel Library</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Highlight.js for code snippets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="./dist/easy-carousel.min.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            position: relative;
+        }
+
+        .navbar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0d6efd20 0%, #0d6efd05 100%);
+            padding: 6rem 0;
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .code-block {
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .table-options th:first-child {
+            width: 200px;
+        }
+
+        .support-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-coffee {
+            background-color: #FF813F;
+            color: white;
+        }
+
+        .btn-coffee:hover {
+            background-color: #FF6B1A;
+            color: white;
+        }
+
+        .demo-carousel {
+            display: flex;
+            gap: 0px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .ec-item {
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0px;
+        }
+
+        .ec-next {
+          margin-right: 45px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 4rem 0;
+            }
+            .section {
+                padding: 3rem 0;
+            }
+
+            .ec-next {
+              margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Easy Carousel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#installation">Installation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#options">Options</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#events">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#support">Support</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Easy Carousel</h1>
+                    <p class="lead mb-4">A lightweight, responsive, and feature-rich JavaScript carousel library with zero dependencies.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#installation" class="btn btn-primary">Get Started</a>
+                        <a href="https://github.com/Nikba-Creative-Studio/easy-carousel" class="btn btn-outline-secondary" target="_blank">View on GitHub</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="demo-carousel mt-4 mt-lg-0">
+                        <!-- Demo carousel will be initialized here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="section">
+        <div class="container">
+            <h2 class="mb-4">Installation</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h4>Via NPM</h4>
+                    <div class="code-block">
+                        <pre><code class="language-bash">npm install easy-carousel</code></pre>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h4>Via CDN</h4>
+                    <div class="code-block">
+                        <pre><code class="language-html">&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-carousel/dist/easy-carousel.min.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/easy-carousel/dist/easy-carousel.min.js"&gt;&lt;/script&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h4>Basic Usage</h4>
+                <div class="code-block">
+                    <pre><code class="language-html">&lt;div class="my-carousel"&gt;
+    &lt;img src="slide1.jpg" alt="Slide 1"&gt;
+    &lt;img src="slide2.jpg" alt="Slide 2"&gt;
+    &lt;img src="slide3.jpg" alt="Slide 3"&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    const carousel = new EasyCarousel('.my-carousel', {
+        items: 3,
+        margin: 20,
+        loop: true,
+        nav: true,
+        dots: true
+    });
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Options Section -->
+    <section id="options" class="section">
+        <div class="container">
+            <h2 class="mb-4">Configuration Options</h2>
+            <div class="p-2 bg-white rounded">
+              <div class="table-responsive">
+                  <table class="table table-options">
+                      <thead>
+                          <tr>
+                              <th>Option</th>
+                              <th>Type</th>
+                              <th>Default</th>
+                              <th>Description</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td><code>items</code></td>
+                              <td>number</td>
+                              <td>3</td>
+                              <td>Number of items to show</td>
+                          </tr>
+                          <tr>
+                              <td><code>margin</code></td>
+                              <td>number</td>
+                              <td>0</td>
+                              <td>Space between items (px)</td>
+                          </tr>
+                          <tr>
+                              <td><code>loop</code></td>
+                              <td>boolean</td>
+                              <td>false</td>
+                              <td>Infinite loop mode</td>
+                          </tr>
+                          <tr>
+                              <td><code>nav</code></td>
+                              <td>boolean</td>
+                              <td>false</td>
+                              <td>Show navigation arrows</td>
+                          </tr>
+                          <tr>
+                              <td><code>dots</code></td>
+                              <td>boolean</td>
+                              <td>true</td>
+                              <td>Show navigation dots</td>
+                          </tr>
+                          <tr>
+                              <td><code>autoplay</code></td>
+                              <td>boolean</td>
+                              <td>false</td>
+                              <td>Enable autoplay</td>
+                          </tr>
+                          <tr>
+                              <td><code>autoplayTimeout</code></td>
+                              <td>number</td>
+                              <td>5000</td>
+                              <td>Autoplay interval (ms)</td>
+                          </tr>
+                          <tr>
+                              <td><code>mouseDrag</code></td>
+                              <td>boolean</td>
+                              <td>true</td>
+                              <td>Enable mouse drag</td>
+                          </tr>
+                          <tr>
+                              <td><code>touchDrag</code></td>
+                              <td>boolean</td>
+                              <td>true</td>
+                              <td>Enable touch swipe</td>
+                          </tr>
+                          <tr>
+                              <td><code>responsive</code></td>
+                              <td>object</td>
+                              <td>{}</td>
+                              <td>Responsive breakpoints config</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="section">
+        <div class="container">
+            <h2 class="mb-4">Events</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Interaction Events</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <strong>Resize:</strong>
+                                    <p class="mb-0">Automatically handles window resize events for responsive layouts</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Mouse Drag:</strong>
+                                    <p class="mb-0">Handles mouse click and drag events for slide navigation</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Touch Events:</strong>
+                                    <p class="mb-0">Manages touch start, move, and end events for mobile devices</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Navigation Events</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <strong>Keyboard Navigation:</strong>
+                                    <p class="mb-0">Left/Right arrow keys for slide navigation</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Autoplay Events:</strong>
+                                    <p class="mb-0">Handles play, pause, and hover pause functionality</p>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Dot Navigation:</strong>
+                                    <p class="mb-0">Click events for dot indicators</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Section -->
+    <section id="support" class="section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card support-card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Buy me a coffee</h5>
+                            <p class="card-text mb-4">If you find Easy Carousel helpful, consider supporting its development!</p>
+                            <a href="https://buymeacoffee.com/nikba" class="btn btn-coffee" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cup-hot me-2" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6H.5ZM13 12.5a2.01 2.01 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5Z"/>
+                                    <path d="m4.4.8-.003.004-.014.019a4.167 4.167 0 0 0-.204.31 2.327 2.327 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.593.593 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3.31 3.31 0 0 1-.202.388 5.444 5.444 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4.149 4.149 0 0 0 .204-.31 2.06 2.06 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.593.593 0 0 0-.09-.252A4.334 4.334 0 0 0 3.6 2.8l-.01-.012a5.099 5.099 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a5.446 5.446 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8Zm3 0-.003.004-.014.019a4.167 4.167 0 0 0-.204.31 2.327 2.327 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.593.593 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3.31 3.31 0 0 1-.202.388 5.444 5.444 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4.149 4.149 0 0 0 .204-.31 2.06 2.06 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.593.593 0 0 0-.09-.252A4.334 4.334 0 0 0 6.6 2.8l-.01-.012a5.099 5.099 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a5.446 5.446 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8Z"/>
+                                </svg>
+                                Buy me a coffee
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-light">
+        <div class="container text-center">
+            <p class="mb-0">© 2025 <a href="https://nikba.com" target="_blank">Nikba Creative Studio</a>. MIT License.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Easy Carousel -->
+    <script src="./dist/easy-carousel.min.js"></script>
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+
+        // Initialize demo carousel
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create demo carousel with dynamic colors
+            const demoContainer = document.querySelector('.demo-carousel');
+            
+            // Define a nice color palette
+            const colors = [
+                { bg: '4158D0', text: 'ffffff' }, // Blue
+                { bg: 'C850C0', text: 'ffffff' }, // Purple
+                { bg: 'FFCC70', text: '000000' }, // Yellow
+                { bg: '43E97B', text: '000000' }, // Green
+                { bg: 'FF6B6B', text: 'ffffff' }  // Red
+            ];
+
+            for (let i = 0; i < colors.length; i++) {
+                const img = document.createElement('img');
+                img.src = `https://placehold.co/600x300/${colors[i].bg}/${colors[i].text}?text=Slide+${i + 1}`;
+                img.alt = `Slide ${i + 1}`;
+                img.style.borderRadius = '8px';
+                demoContainer.appendChild(img);
+            }
+
+            // Initialize carousel
+            new EasyCarousel('.demo-carousel', {
+                items: 1,
+                loop: true,
+                nav: true,
+                dots: true,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
