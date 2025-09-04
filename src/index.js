@@ -21,6 +21,8 @@ class EasyCarousel {
       this.currentIndex = this.settings.startPosition || 0;
       this.previousIndex = null;
       this.autoplayInterval = null;
+      this.originalItemsCount = 0;
+      this.cloneCount = 0;
   
       this.drag = {
         startX: 0,
@@ -98,18 +100,56 @@ class EasyCarousel {
       this.stage.className = 'ec-stage';
   
       const children = Array.from(this.container.children);
-      this.items = children.map((child) => {
-        const item = document.createElement('div');
-        item.className = 'ec-item';
-        item.style.marginRight = `${this.settings.margin}px`;
-        item.appendChild(child);
+      this.originalItemsCount = children.length;
+      
+      // Create items array
+      this.items = [];
+      
+      // If loop is enabled, add clones for seamless infinite scrolling
+      if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+        this.cloneCount = this.settings.items;
+        
+        // Add clones at the beginning (last items)
+        for (let i = this.originalItemsCount - this.cloneCount; i < this.originalItemsCount; i++) {
+          const cloneItem = this.createCarouselItem(children[i].cloneNode(true), true);
+          this.stage.appendChild(cloneItem);
+          this.items.push(cloneItem);
+        }
+      }
+      
+      // Add original items
+      children.forEach((child) => {
+        const item = this.createCarouselItem(child, false);
         this.stage.appendChild(item);
-        return item;
+        this.items.push(item);
       });
+      
+      // If loop is enabled, add clones at the end (first items)
+      if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+        for (let i = 0; i < this.cloneCount; i++) {
+          const cloneItem = this.createCarouselItem(children[i].cloneNode(true), true);
+          this.stage.appendChild(cloneItem);
+          this.items.push(cloneItem);
+        }
+      }
   
       this.container.innerHTML = '';
       this.container.classList.add('easy-carousel');
       this.container.appendChild(this.stage);
+      
+      // Adjust starting position if loop is enabled
+      if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+        this.currentIndex = this.cloneCount + (this.settings.startPosition || 0);
+      }
+    }
+    
+    createCarouselItem(child, isClone = false) {
+      const item = document.createElement('div');
+      item.className = 'ec-item';
+      if (isClone) item.classList.add('ec-clone');
+      item.style.marginRight = `${this.settings.margin}px`;
+      item.appendChild(child);
+      return item;
     }
   
     applyStyles() {
@@ -285,27 +325,84 @@ class EasyCarousel {
       }
     }
   
-    goTo(index) {
-      const maxIndex = this.items.length - this.settings.items;
-      const nextIndex = this.settings.loop ? index % this.items.length : Math.max(0, Math.min(index, maxIndex));
-  
-      if (this.settings.animateOut && this.previousIndex !== null && this.items[this.previousIndex]) {
-        this.items[this.previousIndex].classList.remove(this.settings.animateIn);
-        this.items[this.previousIndex].classList.add(this.settings.animateOut);
+    goTo(index, skipAnimation = false) {
+      if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+        // Handle infinite loop with clones
+        let nextIndex = index;
+        
+        // Allow the transition to happen first
+        if (this.settings.animateOut && this.previousIndex !== null && this.items[this.previousIndex]) {
+          this.items[this.previousIndex].classList.remove(this.settings.animateIn);
+          this.items[this.previousIndex].classList.add(this.settings.animateOut);
+        }
+    
+        if (this.settings.animateIn && this.items[nextIndex] && nextIndex >= 0 && nextIndex < this.items.length) {
+          this.items[nextIndex].classList.remove(this.settings.animateOut);
+          this.items[nextIndex].classList.add(this.settings.animateIn);
+        }
+    
+        this.previousIndex = this.currentIndex;
+        this.currentIndex = nextIndex;
+        
+        // Apply transform
+        const offset = -(this.currentIndex * (100 / this.settings.items));
+        if (skipAnimation) {
+          this.stage.style.transition = 'none';
+        }
+        this.stage.style.transform = `translateX(${offset}%)`;
+        
+        // Check if we need to reposition after animation
+        if (!skipAnimation) {
+          setTimeout(() => {
+            this.checkAndRepositionForInfiniteLoop();
+          }, 300); // Match the transition duration
+        }
+        
+        if (skipAnimation) {
+          // Restore transition after repositioning
+          setTimeout(() => {
+            this.stage.style.transition = 'transform 0.3s ease';
+          }, 50);
+        }
+      } else {
+        // Original non-loop behavior
+        const maxIndex = this.items.length - this.settings.items;
+        const nextIndex = Math.max(0, Math.min(index, maxIndex));
+    
+        if (this.settings.animateOut && this.previousIndex !== null && this.items[this.previousIndex]) {
+          this.items[this.previousIndex].classList.remove(this.settings.animateIn);
+          this.items[this.previousIndex].classList.add(this.settings.animateOut);
+        }
+    
+        if (this.settings.animateIn && this.items[nextIndex]) {
+          this.items[nextIndex].classList.remove(this.settings.animateOut);
+          this.items[nextIndex].classList.add(this.settings.animateIn);
+        }
+    
+        this.previousIndex = nextIndex;
+        this.currentIndex = nextIndex;
+    
+        const offset = -(this.currentIndex * (100 / this.settings.items));
+        this.stage.style.transform = `translateX(${offset}%)`;
       }
-  
-      if (this.settings.animateIn && this.items[nextIndex]) {
-        this.items[nextIndex].classList.remove(this.settings.animateOut);
-        this.items[nextIndex].classList.add(this.settings.animateIn);
-      }
-  
-      this.previousIndex = nextIndex;
-      this.currentIndex = nextIndex;
-  
-      const offset = -(this.currentIndex * (100 / this.settings.items));
-      this.stage.style.transform = `translateX(${offset}%)`;
+      
       this.updateDots();
       if (this.settings.lazyLoad) this.lazyLoadImages();
+    }
+    
+    checkAndRepositionForInfiniteLoop() {
+      if (!this.settings.loop || this.originalItemsCount <= this.settings.items) return;
+      
+      // If we're at the beginning clones, jump to the real items at the end
+      if (this.currentIndex < this.cloneCount) {
+        const newIndex = this.originalItemsCount + this.currentIndex;
+        this.goTo(newIndex, true);
+      }
+      // If we're at the end clones, jump to the real items at the beginning  
+      else if (this.currentIndex >= this.cloneCount + this.originalItemsCount) {
+        const newIndex = this.currentIndex - this.originalItemsCount;
+        this.goTo(newIndex, true);
+      }
     }
   
     next() {
@@ -339,13 +436,22 @@ class EasyCarousel {
       this.dotsContainer = document.createElement('div');
       this.dotsContainer.className = 'ec-dots';
   
-      const dotsCount = this.items.length - this.settings.items + 1;
+      // For infinite loop, only show dots for original items
+      const dotsCount = this.settings.loop && this.originalItemsCount > this.settings.items 
+        ? this.originalItemsCount - this.settings.items + 1
+        : this.items.length - this.settings.items + 1;
       this.dots = [];
   
       for (let i = 0; i < dotsCount; i++) {
         const dot = document.createElement('div');
         dot.className = 'ec-dot';
-        dot.addEventListener('click', () => this.goTo(i));
+        dot.addEventListener('click', () => {
+          if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+            this.goTo(this.cloneCount + i);
+          } else {
+            this.goTo(i);
+          }
+        });
         this.dotsContainer.appendChild(dot);
         this.dots.push(dot);
       }
@@ -356,8 +462,26 @@ class EasyCarousel {
   
     updateDots() {
       if (!this.dots) return;
+      
+      let activeIndex;
+      if (this.settings.loop && this.originalItemsCount > this.settings.items) {
+        // Calculate the active dot index for infinite loop
+        if (this.currentIndex < this.cloneCount) {
+          // We're in the beginning clones, map to end of original items
+          activeIndex = this.originalItemsCount - this.cloneCount + this.currentIndex;
+        } else if (this.currentIndex >= this.cloneCount + this.originalItemsCount) {
+          // We're in the end clones, map to beginning of original items
+          activeIndex = this.currentIndex - this.cloneCount - this.originalItemsCount;
+        } else {
+          // We're in the original items
+          activeIndex = this.currentIndex - this.cloneCount;
+        }
+      } else {
+        activeIndex = this.currentIndex;
+      }
+      
       this.dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === this.currentIndex);
+        dot.classList.toggle('active', i === activeIndex);
       });
     }
   
@@ -409,10 +533,10 @@ class EasyCarousel {
       this.container.classList.remove('easy-carousel');
       this.container.removeAttribute('tabindex');
       
-      // Restore original content
-      const items = Array.from(this.stage.querySelectorAll('.ec-item')).map(item => item.firstElementChild);
+      // Restore original content (exclude clones)
+      const originalItems = Array.from(this.stage.querySelectorAll('.ec-item:not(.ec-clone)')).map(item => item.firstElementChild);
       this.container.innerHTML = '';
-      items.forEach(item => this.container.appendChild(item));
+      originalItems.forEach(item => this.container.appendChild(item));
 
       // Clear references
       this.items = null;
@@ -420,6 +544,8 @@ class EasyCarousel {
       this.dots = null;
       this.dotsContainer = null;
       this.boundEvents = null;
+      this.originalItemsCount = 0;
+      this.cloneCount = 0;
     }
   }
   
