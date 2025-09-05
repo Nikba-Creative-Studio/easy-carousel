@@ -193,9 +193,7 @@ class EasyCarousel {
     }
     if (this.settings.touchDrag || this.settings.mouseDrag) {
       this.stage.addEventListener('mousedown', this.boundEvents.dragStart);
-      this.stage.addEventListener('touchstart', this.boundEvents.dragStart, {
-        passive: true
-      });
+      this.stage.addEventListener('touchstart', this.boundEvents.dragStart);
       document.addEventListener('mousemove', this.boundEvents.dragMove);
       document.addEventListener('touchmove', this.boundEvents.dragMove, {
         passive: false
